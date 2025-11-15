@@ -1,0 +1,66 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+          # Discovery locator configuration (moved under server.webflux)
+          discovery:
+            locator:
+              enabled: false
+          globalcors:
+            add-to-simple-url-handler-mapping: false
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+    # Fetch registry more frequently for faster service discovery
+    registry-fetch-interval-seconds: 10
+    # Enable delta updates for efficiency
+    disable-delta: false
+  instance:
+    # Faster heartbeat for quicker deregistration detection
+    lease-renewal-interval-in-seconds: 10
+    # Service considered down after 30 seconds without heartbeat
+    lease-expiration-duration-in-seconds: 30
+    # Prefer IP address over hostname
+    prefer-ip-address: true
+    # Include metadata for better service discovery
+    metadata-map:
+      zone: default
+      version: 1.0.0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,gateway,routes
+  endpoint:
+    health:
+      show-details: always
+
+server:
+  port: 8080
+
+jwt:
+  secret: bXktc3VwZXItc2VjcmV0LXNob3VsZC1iZS1iYXNlNjQtZW5jb2RlZA==
+
+# Logging configuration for debugging
+logging:
+  level:
+    digital.shradha.config:
+      - DEBUG
+      - INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+api:
+  open-endpoints:
+    - /auth/login
+    - /auth/register
+    - /auth/refresh-token
+    - /v1/api-docs
